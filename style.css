@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    -webkit-tap-highlight-color: transparent; /* Убирает синюю рамку при тапе на Android */
+    -webkit-tap-highlight-color: transparent; 
 }
 
 body {
@@ -12,12 +12,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* 100dvh решает проблему с исчезающим адресным баром на Android */
     height: 100vh;
     height: 100dvh; 
     color: #333;
     overflow: hidden; 
-    /* Запрещаем выделять текст, чтобы приложение ощущалось как нативное */
     user-select: none;
     -webkit-user-select: none;
 }
@@ -37,7 +35,7 @@ body {
     justify-content: center;
 }
 
-/* --- Admin Toggle Button --- */
+/* --- Admin Toggle Button (as a link) --- */
 #admin-toggle-btn {
     position: absolute;
     top: 15px;
@@ -48,7 +46,10 @@ body {
     cursor: pointer;
     opacity: 0.2; 
     transition: opacity 0.3s;
-    padding: 10px; /* Увеличиваем область нажатия для пальца */
+    padding: 10px;
+    text-decoration: none;
+    color: inherit;
+    z-index: 10;
 }
 #admin-toggle-btn:active {
     opacity: 1;
@@ -119,7 +120,7 @@ h2 {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    -webkit-appearance: none; /* Убирает стандартные стили кнопок на Android */
+    -webkit-appearance: none; 
 }
 
 .btn:active { transform: scale(0.96); }
@@ -150,7 +151,6 @@ h2 {
 
 .input-area { display: flex; flex-direction: column; width: 100%; gap: 10px; }
 
-/* ВАЖНО: font-size: 16px предотвращает автоматический зум на Android */
 input[type="number"], input[type="text"], input[type="password"] {
     width: 100%;
     padding: 15px;
@@ -198,7 +198,7 @@ input[type=number] { appearance: textfield; -moz-appearance: textfield; }
     margin-bottom: 20px;
     border: 2px solid #e0e0e0;
     text-align: left;
-    -webkit-overflow-scrolling: touch; /* Плавный скролл на Android */
+    -webkit-overflow-scrolling: touch; 
 }
 
 .result-item {

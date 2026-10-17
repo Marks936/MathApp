@@ -43,7 +43,10 @@ function nextQuestion() {
     feedback.textContent = '';
     feedback.className = 'feedback';
     
-    if (window.innerWidth > 768) answerInput.focus();
+    // Автофокус на Android (чтобы клавиатура не закрывалась)
+    setTimeout(() => {
+        answerInput.focus();
+    }, 100);
 
     questionCounter.textContent = `Вопрос ${currentQuestion} из ${totalQuestions}`;
 
@@ -110,6 +113,9 @@ function checkAnswer() {
 function endGame() {
     quizScreen.classList.remove('active');
     resultScreen.classList.add('active');
+    
+    // Прячем клавиатуру на телефоне при окончании игры
+    answerInput.blur();
 
     const percentage = Math.round((score / totalQuestions) * 100);
     
@@ -127,19 +133,17 @@ function endGame() {
         finalScoreText.textContent = `Не сдавайся! ${percentage}% (${score} из ${totalQuestions})`;
     }
 
-    // СОХРАНЯЕМ РЕЗУЛЬТАТ В ПАМЯТЬ БРАУЗЕРА
     saveResultToAdmin(currentDifficulty, score, percentage);
 }
 
 // --- 5. Играть снова ---
 function goHome() {
-    // Скрываем все экраны
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    // Показываем стартовый
     startScreen.classList.add('active');
+    answerInput.blur(); // Скрываем клавиатуру, если она открыта
 }
 
-// --- 6. Отправка по кнопке Enter ---
+// --- 6. Отправка по кнопке Enter (и на виртуальной клавиатуре тоже) ---
 answerInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') checkAnswer();
 });
@@ -148,7 +152,6 @@ answerInput.addEventListener('keypress', function (e) {
 // === СИСТЕМА АДМИНИСТРАТОРА (LOCAL STORAGE) ===
 // ==========================================
 
-// Показ экрана входа
 function showAdminLogin() {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     adminLoginScreen.classList.add('active');
@@ -157,13 +160,11 @@ function showAdminLogin() {
     document.getElementById('login-error').textContent = '';
 }
 
-// Проверка логина и пароля
 function checkAdminLogin() {
     const user = document.getElementById('admin-user').value;
     const pass = document.getElementById('admin-pass').value;
     const errorText = document.getElementById('login-error');
 
-    // Твои данные для входа
     if (user === 'admin' && pass === '00010') {
         errorText.textContent = '';
         loadAdminPanel();
@@ -172,15 +173,13 @@ function checkAdminLogin() {
     }
 }
 
-// Загрузка и отображение результатов
 function loadAdminPanel() {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     adminPanelScreen.classList.add('active');
 
     const resultsList = document.getElementById('admin-results-list');
-    resultsList.innerHTML = ''; // Очищаем список
+    resultsList.innerHTML = ''; 
 
-    // Достаем данные из памяти браузера
     let history = JSON.parse(localStorage.getItem('mathAppHistory')) || [];
 
     if (history.length === 0) {
@@ -188,12 +187,10 @@ function loadAdminPanel() {
         return;
     }
 
-    // Показываем последние результаты сверху
     history.slice().reverse().forEach(record => {
         const div = document.createElement('div');
         div.className = 'result-item';
         
-        // Переводим сложность на русский
         let diffRus = record.difficulty === 'easy' ? 'Легко 🌱' : record.difficulty === 'medium' ? 'Средне ⚡' : 'Сложно 🔥';
 
         div.innerHTML = `
@@ -204,11 +201,9 @@ function loadAdminPanel() {
     });
 }
 
-// Сохранение результата
 function saveResultToAdmin(difficulty, score, percentage) {
     let history = JSON.parse(localStorage.getItem('mathAppHistory')) || [];
     
-    // Создаем запись с текущей датой и временем
     const now = new Date();
     const dateStr = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
 
@@ -219,14 +214,12 @@ function saveResultToAdmin(difficulty, score, percentage) {
         percentage: percentage
     });
 
-    // Сохраняем обратно
     localStorage.setItem('mathAppHistory', JSON.stringify(history));
 }
 
-// Очистка истории
 function clearAdminResults() {
     if (confirm('Ты уверен, что хочешь удалить всю историю результатов?')) {
         localStorage.removeItem('mathAppHistory');
-        loadAdminPanel(); // Обновляем экран
+        loadAdminPanel(); 
     }
 }

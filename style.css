@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent; /* Убирает синюю рамку при тапе на Android */
 }
 
 body {
@@ -12,14 +12,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    /* 100dvh решает проблему с исчезающим адресным баром на Android */
+    height: 100vh;
+    height: 100dvh; 
     color: #333;
     overflow: hidden; 
+    /* Запрещаем выделять текст, чтобы приложение ощущалось как нативное */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .app-container {
     background-color: #ffffff;
-    width: 90%;
+    width: 95%;
     max-width: 400px;
     padding: 30px 20px;
     border-radius: 24px;
@@ -41,10 +46,11 @@ body {
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    opacity: 0.3; /* Делаем её почти невидимой */
+    opacity: 0.2; 
     transition: opacity 0.3s;
+    padding: 10px; /* Увеличиваем область нажатия для пальца */
 }
-#admin-toggle-btn:hover {
+#admin-toggle-btn:active {
     opacity: 1;
 }
 
@@ -113,6 +119,7 @@ h2 {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    -webkit-appearance: none; /* Убирает стандартные стили кнопок на Android */
 }
 
 .btn:active { transform: scale(0.96); }
@@ -143,16 +150,18 @@ h2 {
 
 .input-area { display: flex; flex-direction: column; width: 100%; gap: 10px; }
 
+/* ВАЖНО: font-size: 16px предотвращает автоматический зум на Android */
 input[type="number"], input[type="text"], input[type="password"] {
     width: 100%;
     padding: 15px;
-    font-size: 1.2rem;
+    font-size: 16px; 
     text-align: center;
     border: 3px solid #bdc3c7;
     border-radius: 16px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     background-color: #f8f9fa;
+    -webkit-appearance: none;
 }
 
 input[type="number"] { font-size: 2rem; font-weight: bold; }
@@ -189,6 +198,7 @@ input[type=number] { appearance: textfield; -moz-appearance: textfield; }
     margin-bottom: 20px;
     border: 2px solid #e0e0e0;
     text-align: left;
+    -webkit-overflow-scrolling: touch; /* Плавный скролл на Android */
 }
 
 .result-item {

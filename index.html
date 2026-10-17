@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Тест Математики</title>
+    <title>Тренажёр Математики</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="app-container">
         
+        <!-- Скрытая кнопка админа (в правом верхнем углу) -->
+        <button id="admin-toggle-btn" onclick="showAdminLogin()">🔒</button>
+
         <!-- 1. ЭКРАН СТАРТА -->
         <div id="start-screen" class="screen active">
             <div class="emoji">🚀</div>
@@ -53,6 +56,28 @@
             <h1>Готово!</h1>
             <p id="final-score-text">Ты набрал 0%</p>
             <button onclick="goHome()" class="btn submit-btn">Играть снова</button>
+        </div>
+
+        <!-- 4. ЭКРАН ВХОДА ДЛЯ АДМИНА -->
+        <div id="admin-login-screen" class="screen">
+            <h1>Вход для админа</h1>
+            <div class="input-area" style="margin-top: 20px;">
+                <input type="text" id="admin-user" placeholder="Логин" autocomplete="off">
+                <input type="password" id="admin-pass" placeholder="Пароль">
+                <button onclick="checkAdminLogin()" class="btn submit-btn">Войти</button>
+                <p id="login-error" style="color: #e74c3c; font-weight: bold; margin-top: 10px;"></p>
+            </div>
+            <button onclick="goHome()" class="btn" style="background: #bdc3c7; color: white; margin-top: 20px;">Назад</button>
+        </div>
+
+        <!-- 5. ПАНЕЛЬ АДМИНА -->
+        <div id="admin-panel-screen" class="screen">
+            <h1>Результаты 📊</h1>
+            <div id="admin-results-list" class="results-list">
+                <!-- Результаты будут загружаться сюда -->
+            </div>
+            <button onclick="clearAdminResults()" class="btn hard-btn" style="margin-bottom: 15px;">Очистить историю</button>
+            <button onclick="goHome()" class="btn submit-btn">Выйти</button>
         </div>
 
     </div>

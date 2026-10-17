@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    -webkit-tap-highlight-color: transparent; /* Убирает синюю рамку при нажатии на телефоне */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -12,9 +12,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Используем min-height для телефонов */
+    min-height: 100vh;
     color: #333;
-    overflow: hidden; /* Чтобы не было скролла на телефоне */
+    overflow: hidden; 
 }
 
 .app-container {
@@ -30,6 +30,22 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+/* --- Admin Toggle Button --- */
+#admin-toggle-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.3; /* Делаем её почти невидимой */
+    transition: opacity 0.3s;
+}
+#admin-toggle-btn:hover {
+    opacity: 1;
 }
 
 /* --- Screen Management --- */
@@ -71,7 +87,7 @@ h1 {
 p {
     font-size: 1.1rem;
     color: #7f8c8d;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 h2 {
@@ -91,7 +107,7 @@ h2 {
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
     width: 100%;
-    padding: 18px; /* Больше для пальцев */
+    padding: 18px;
     margin-bottom: 15px;
     display: flex;
     justify-content: center;
@@ -99,47 +115,21 @@ h2 {
     gap: 10px;
 }
 
-.btn:active {
-    transform: scale(0.96);
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
+.btn:active { transform: scale(0.96); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 /* Difficulty Buttons */
-.difficulty-buttons {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
+.difficulty-buttons { width: 100%; display: flex; flex-direction: column; }
 .easy-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; box-shadow: 0 6px 0 #219150; }
 .medium-btn { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 6px 0 #c06909; }
 .hard-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; box-shadow: 0 6px 0 #962d22; }
-
-.easy-btn:active, .medium-btn:active, .hard-btn:active {
-    box-shadow: 0 2px 0 #219150;
-    transform: translateY(4px);
-}
+.easy-btn:active, .medium-btn:active, .hard-btn:active { box-shadow: 0 2px 0 #219150; transform: translateY(4px); }
 
 /* Submit Button */
-.submit-btn {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
-    box-shadow: 0 6px 0 #1f618d;
-    margin-top: 10px;
-    margin-bottom: 0;
-}
+.submit-btn { background: linear-gradient(135deg, #3498db, #2980b9); color: white; box-shadow: 0 6px 0 #1f618d; margin-top: 10px; margin-bottom: 0; }
+.submit-btn:active { box-shadow: 0 2px 0 #1f618d; transform: translateY(4px); }
 
-.submit-btn:active {
-    box-shadow: 0 2px 0 #1f618d;
-    transform: translateY(4px);
-}
-
-/* --- Quiz Screen Elements --- */
+/* --- Inputs (Quiz and Admin Login) --- */
 .header {
     width: 100%;
     text-align: center;
@@ -151,18 +141,12 @@ h2 {
     letter-spacing: 1px;
 }
 
-.input-area {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-}
+.input-area { display: flex; flex-direction: column; width: 100%; gap: 10px; }
 
-input[type="number"] {
+input[type="number"], input[type="text"], input[type="password"] {
     width: 100%;
-    padding: 18px;
-    font-size: 2rem;
-    font-weight: bold;
+    padding: 15px;
+    font-size: 1.2rem;
     text-align: center;
     border: 3px solid #bdc3c7;
     border-radius: 16px;
@@ -171,51 +155,50 @@ input[type="number"] {
     background-color: #f8f9fa;
 }
 
-input[type="number"]:focus {
+input[type="number"] { font-size: 2rem; font-weight: bold; }
+
+input:focus {
     border-color: #3498db;
     box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
     background-color: white;
 }
 
-/* Скрываем стрелочки в инпуте */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type=number] {
-    appearance: textfield;
-    -moz-appearance: textfield;
-}
+/* Hide number arrows */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { appearance: textfield; -moz-appearance: textfield; }
 
 /* --- Feedback --- */
-.feedback {
-    margin-top: 20px;
-    font-size: 1.3rem;
-    font-weight: 800;
-    height: 30px;
-    transition: all 0.3s ease;
-}
-
+.feedback { margin-top: 20px; font-size: 1.3rem; font-weight: 800; height: 30px; transition: all 0.3s ease; }
 .correct { color: #2ecc71; animation: pop 0.3s; }
 .wrong { color: #e74c3c; animation: shake 0.4s; }
 
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
 /* --- Results Screen --- */
-#final-score-text {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    font-weight: 800;
-    margin-bottom: 30px;
+#final-score-text { font-size: 1.5rem; color: #2c3e50; font-weight: 800; margin-bottom: 30px; }
+
+/* --- Admin Panel Styles --- */
+.results-list {
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #e0e0e0;
+    text-align: left;
 }
+
+.result-item {
+    padding: 10px;
+    border-bottom: 1px solid #dcdcdc;
+    font-size: 0.95rem;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+}
+.result-item:last-child { border-bottom: none; }
+.result-date { font-size: 0.75rem; color: #7f8c8d; margin-bottom: 3px; }
+.result-details { font-weight: bold; }

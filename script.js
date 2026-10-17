@@ -4,12 +4,15 @@ const totalQuestions = 20;
 let score = 0;
 let currentAnswer = 0;
 let currentDifficulty = 'easy';
-let isAnswering = false; // Защита от двойных кликов
+let isAnswering = false; 
 
 // --- Элементы DOM ---
 const startScreen = document.getElementById('start-screen');
 const quizScreen = document.getElementById('quiz-screen');
 const resultScreen = document.getElementById('result-screen');
+const adminLoginScreen = document.getElementById('admin-login-screen');
+const adminPanelScreen = document.getElementById('admin-panel-screen');
+
 const questionCounter = document.getElementById('question-counter');
 const mathProblem = document.getElementById('math-problem');
 const answerInput = document.getElementById('answer-input');
@@ -40,10 +43,7 @@ function nextQuestion() {
     feedback.textContent = '';
     feedback.className = 'feedback';
     
-    // Автофокус только если это не мобильный телефон (на телефоне это вызывает клавиатуру и дергает экран)
-    if (window.innerWidth > 768) {
-        answerInput.focus();
-    }
+    if (window.innerWidth > 768) answerInput.focus();
 
     questionCounter.textContent = `Вопрос ${currentQuestion} из ${totalQuestions}`;
 
@@ -73,11 +73,10 @@ function nextQuestion() {
 
 // --- 3. Проверка ответа ---
 function checkAnswer() {
-    if (isAnswering) return; // Если уже проверяем, игнорируем клик
+    if (isAnswering) return; 
     
     const userAnswer = parseInt(answerInput.value);
 
-    // Если поле пустое, подсвечиваем его красным и выходим
     if (isNaN(userAnswer)) {
         answerInput.style.borderColor = '#e74c3c';
         setTimeout(() => answerInput.style.borderColor = '#bdc3c7', 500);
@@ -97,7 +96,6 @@ function checkAnswer() {
         feedback.className = 'feedback wrong';
     }
 
-    // Задержка 1.5 секунды перед следующим вопросом
     setTimeout(() => {
         if (currentQuestion < totalQuestions) {
             currentQuestion++;
@@ -108,14 +106,13 @@ function checkAnswer() {
     }, 1500);
 }
 
-// --- 4. Конец игры ---
+// --- 4. Конец игры и сохранение результата ---
 function endGame() {
     quizScreen.classList.remove('active');
     resultScreen.classList.add('active');
 
     const percentage = Math.round((score / totalQuestions) * 100);
     
-    // Прикольные сообщения в зависимости от результата
     if (percentage === 100) {
         resultEmoji.textContent = "🏆";
         finalScoreText.textContent = `Идеально! 100% (${score} из ${totalQuestions})`;
@@ -129,17 +126,107 @@ function endGame() {
         resultEmoji.textContent = "💪";
         finalScoreText.textContent = `Не сдавайся! ${percentage}% (${score} из ${totalQuestions})`;
     }
+
+    // СОХРАНЯЕМ РЕЗУЛЬТАТ В ПАМЯТЬ БРАУЗЕРА
+    saveResultToAdmin(currentDifficulty, score, percentage);
 }
 
 // --- 5. Играть снова ---
 function goHome() {
-    resultScreen.classList.remove('active');
+    // Скрываем все экраны
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    // Показываем стартовый
     startScreen.classList.add('active');
 }
 
 // --- 6. Отправка по кнопке Enter ---
 answerInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        checkAnswer();
-    }
+    if (e.key === 'Enter') checkAnswer();
 });
+
+// ==========================================
+// === СИСТЕМА АДМИНИСТРАТОРА (LOCAL STORAGE) ===
+// ==========================================
+
+// Показ экрана входа
+function showAdminLogin() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    adminLoginScreen.classList.add('active');
+    document.getElementById('admin-user').value = '';
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('login-error').textContent = '';
+}
+
+// Проверка логина и пароля
+function checkAdminLogin() {
+    const user = document.getElementById('admin-user').value;
+    const pass = document.getElementById('admin-pass').value;
+    const errorText = document.getElementById('login-error');
+
+    // Твои данные для входа
+    if (user === 'admin' && pass === '00010') {
+        errorText.textContent = '';
+        loadAdminPanel();
+    } else {
+        errorText.textContent = 'Неверный логин или пароль!';
+    }
+}
+
+// Загрузка и отображение результатов
+function loadAdminPanel() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    adminPanelScreen.classList.add('active');
+
+    const resultsList = document.getElementById('admin-results-list');
+    resultsList.innerHTML = ''; // Очищаем список
+
+    // Достаем данные из памяти браузера
+    let history = JSON.parse(localStorage.getItem('mathAppHistory')) || [];
+
+    if (history.length === 0) {
+        resultsList.innerHTML = '<p style="text-align:center; color:#7f8c8d;">Пока нет результатов.</p>';
+        return;
+    }
+
+    // Показываем последние результаты сверху
+    history.slice().reverse().forEach(record => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        
+        // Переводим сложность на русский
+        let diffRus = record.difficulty === 'easy' ? 'Легко 🌱' : record.difficulty === 'medium' ? 'Средне ⚡' : 'Сложно 🔥';
+
+        div.innerHTML = `
+            <span class="result-date">${record.date}</span>
+            <span class="result-details">Сложность: ${diffRus} | Счёт: ${record.score}/20 (${record.percentage}%)</span>
+        `;
+        resultsList.appendChild(div);
+    });
+}
+
+// Сохранение результата
+function saveResultToAdmin(difficulty, score, percentage) {
+    let history = JSON.parse(localStorage.getItem('mathAppHistory')) || [];
+    
+    // Создаем запись с текущей датой и временем
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+
+    history.push({
+        date: dateStr,
+        difficulty: difficulty,
+        score: score,
+        percentage: percentage
+    });
+
+    // Сохраняем обратно
+    localStorage.setItem('mathAppHistory', JSON.stringify(history));
+}
+
+// Очистка истории
+function clearAdminResults() {
+    if (confirm('Ты уверен, что хочешь удалить всю историю результатов?')) {
+        localStorage.removeItem('mathAppHistory');
+        loadAdminPanel(); // Обновляем экран
+    }
+}

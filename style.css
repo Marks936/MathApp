@@ -1,0 +1,221 @@
+/* --- General Setup --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent; /* Убирает синюю рамку при нажатии на телефоне */
+}
+
+body {
+    background: linear-gradient(135deg, #e0f7fa 0%, #f0f4f8 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Используем min-height для телефонов */
+    color: #333;
+    overflow: hidden; /* Чтобы не было скролла на телефоне */
+}
+
+.app-container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 400px;
+    padding: 30px 20px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* --- Screen Management --- */
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.screen.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* --- Typography --- */
+.emoji {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 3.5rem;
+    color: #2c3e50;
+    margin: 20px 0;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+/* --- Buttons --- */
+.btn {
+    border: none;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    width: 100%;
+    padding: 18px; /* Больше для пальцев */
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Difficulty Buttons */
+.difficulty-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.easy-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; box-shadow: 0 6px 0 #219150; }
+.medium-btn { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 6px 0 #c06909; }
+.hard-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; box-shadow: 0 6px 0 #962d22; }
+
+.easy-btn:active, .medium-btn:active, .hard-btn:active {
+    box-shadow: 0 2px 0 #219150;
+    transform: translateY(4px);
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 6px 0 #1f618d;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.submit-btn:active {
+    box-shadow: 0 2px 0 #1f618d;
+    transform: translateY(4px);
+}
+
+/* --- Quiz Screen Elements --- */
+.header {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #95a5a6;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.input-area {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 18px;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid #bdc3c7;
+    border-radius: 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #f8f9fa;
+}
+
+input[type="number"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+    background-color: white;
+}
+
+/* Скрываем стрелочки в инпуте */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* --- Feedback --- */
+.feedback {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    height: 30px;
+    transition: all 0.3s ease;
+}
+
+.correct { color: #2ecc71; animation: pop 0.3s; }
+.wrong { color: #e74c3c; animation: shake 0.4s; }
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* --- Results Screen --- */
+#final-score-text {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 800;
+    margin-bottom: 30px;
+}

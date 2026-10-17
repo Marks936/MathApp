@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тренажёр Математики</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- 1. ЭКРАН СТАРТА -->
+        <div id="start-screen" class="screen active">
+            <div class="emoji">🚀</div>
+            <h1>Математика</h1>
+            <p>Выбери уровень сложности, чтобы начать!</p>
+            
+            <div class="difficulty-buttons">
+                <button onclick="startGame('easy')" class="btn easy-btn">
+                    <span>Легко</span> 🌱
+                </button>
+                <button onclick="startGame('medium')" class="btn medium-btn">
+                    <span>Средне</span> ⚡
+                </button>
+                <button onclick="startGame('hard')" class="btn hard-btn">
+                    <span>Сложно</span> 🔥
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. ЭКРАН ВИКТОРИНЫ -->
+        <div id="quiz-screen" class="screen">
+            <div class="header">
+                <span id="question-counter">Вопрос 1 из 20</span>
+            </div>
+            
+            <div class="problem-area">
+                <h2 id="math-problem">25 × 8 = ?</h2>
+            </div>
+
+            <div class="input-area">
+                <input type="number" id="answer-input" placeholder="?" autocomplete="off" inputmode="numeric">
+                <button id="submit-btn" class="btn submit-btn" onclick="checkAnswer()">Проверить</button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <!-- 3. ЭКРАН РЕЗУЛЬТАТОВ -->
+        <div id="result-screen" class="screen">
+            <div class="emoji" id="result-emoji">🎉</div>
+            <h1>Готово!</h1>
+            <p id="final-score-text">Ты набрал 0%</p>
+            <button onclick="goHome()" class="btn submit-btn">Играть снова</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
